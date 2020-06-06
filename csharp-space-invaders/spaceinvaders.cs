@@ -19,11 +19,20 @@ namespace csharp_space_invaders
         // image of our space ship
         private Image space_ship;
 
+        // image of our enemy
+        private Image enemy;
+
         // position of our space ship
         private int pos_x, pos_y;
 
         // size of our space ship
         private int ship_size_x, ship_size_y;
+
+        // position of our enemy
+        private int pos_x_enemy, pos_y_enemy;
+
+        // size of our enemy
+        private int enemy_size_x, enemy_size_y;
 
         // should our space ship move left/right?
         private bool move_left = false, move_right = false;
@@ -62,6 +71,10 @@ namespace csharp_space_invaders
 
             // draw our space ship
             g.DrawImage(space_ship, rect);
+
+            RectangleF rect_enemy = new RectangleF(pos_x_enemy, pos_y_enemy, enemy_size_x, enemy_size_y);
+            // draw our enemy
+            g.DrawImage(enemy, rect_enemy);
         }
 
         public spaceinvaders()
@@ -89,6 +102,17 @@ namespace csharp_space_invaders
             // position of our space ship
             pos_x = (ClientSize.Width - ship_size_x) / 2;
             pos_y = (ClientSize.Height - ship_size_y) - ClientSize.Height / 50;
+
+            // load our enemy
+            enemy = Image.FromFile("./../../../img/enemy.png");
+
+            // size of the enemy
+            enemy_size_x = 30;
+            enemy_size_y = 30;
+
+            //position of the enemy
+            pos_x_enemy = (ClientSize.Width - enemy_size_x) / 2;
+            pos_y_enemy = ClientSize.Height / 50;
 
             // add a message filter so we can capture key presses (and releases)
             Application.AddMessageFilter(this);
