@@ -26,11 +26,16 @@ namespace csharp_space_invaders
         {
             base.OnPaint(e);
 
-            Graphics g = e.Graphics;
+            /*Graphics g = e.Graphics;
             using (Pen selPen = new Pen(Color.Blue))
             {
                 using (Brush brush = new SolidBrush(Color.Blue)) g.FillRectangle(brush, 10, 10, 50, 50);
-            }
+            }*/
+
+            Graphics g = e.Graphics;
+
+            g.DrawString("Hallo Welt", DefaultFont, new SolidBrush(Color.White), 0, 0);
+            g.DrawString("Ihr seid alle blöd!", DefaultFont, new SolidBrush(Color.White), 0, DefaultFont.Size + 5);
         }
 
         public spaceinvaders()
