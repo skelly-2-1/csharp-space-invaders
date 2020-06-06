@@ -24,13 +24,8 @@ namespace csharp_space_invaders
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            // windows forms onpaint aufrufen
             base.OnPaint(e);
-
-            /*Graphics g = e.Graphics;
-            using (Pen selPen = new Pen(Color.Blue))
-            {
-                using (Brush brush = new SolidBrush(Color.Blue)) g.FillRectangle(brush, 10, 10, 50, 50);
-            }*/
 
             Graphics g = e.Graphics;
 
