@@ -13,12 +13,12 @@ namespace csharp_space_invaders
     public partial class spaceinvaders : Form
     {
         
-        // The timer that forces our window to refresh
+        // the timer that forces our window to refresh
         private static System.Windows.Forms.Timer refresh_timer;
 
         private void timer_event(Object source, EventArgs e)
         {
-            // Refreshes the window, forcing it to re-draw (so OnPaint gets called again)
+            // refreshes the window, forcing it to re-draw (so OnPaint gets called again)
             Refresh();
         }
 
@@ -37,8 +37,8 @@ namespace csharp_space_invaders
         {
             InitializeComponent();
 
-            // Create the timer that keeps refreshing our window
-            int target_fps = 60; // How many FPS our window should have
+            // create the timer that keeps refreshing our window
+            int target_fps = 60; // how many FPS our window should have
 
             refresh_timer = new System.Windows.Forms.Timer();
             refresh_timer.Interval = (int)(1000.0 / ((double)target_fps)); // turn FPS to millisecond interval
