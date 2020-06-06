@@ -69,7 +69,7 @@ namespace csharp_space_invaders
             refresh_timer.Start();
 
             // load our space ship image
-            space_ship = Image.FromFile("ship.png");
+            space_ship = Image.FromFile("./../../../ship.png");
 
             // create random object
             rnd = new Random();
