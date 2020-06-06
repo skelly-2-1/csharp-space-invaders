@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace csharp_space_invaders
 {
-    public partial class Form1 : Form
+    public partial class spaceinvaders : Form
     {
-        public Form1()
+        public spaceinvaders()
         {
             InitializeComponent();
         }
