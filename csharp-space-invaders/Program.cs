@@ -11,9 +11,15 @@ namespace csharp_space_invaders
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// 
+        // test test test
         [STAThread]
         static void Main()
         {
+            
+            // test
+            // test
+            // test
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new spaceinvaders());
