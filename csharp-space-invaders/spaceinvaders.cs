@@ -164,7 +164,7 @@ namespace csharp_space_invaders
                 // check if i is a multiplier of 10
                 if (i % 10 == 0)
                 {
-                    // increase x by one
+                    // increase x by one (if i isn't 0)
                     if (i > 0) x++;
 
                     // set j to 0 (since it should only go from 0-9)
