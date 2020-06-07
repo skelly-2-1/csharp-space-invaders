@@ -35,9 +35,9 @@ namespace csharp_space_invaders
         private int ship_size_x, ship_size_y;
 
         // position of our enemy
-        private int [] pos_x_enemy = new int [50], pos_y_enemy = new int [50];
+        private int[] pos_x_enemy = new int[50], pos_y_enemy = new int[50];
 
-        // size of our enemy
+        // size of our enemies
         private int enemy_size_x, enemy_size_y;
 
         // should our space ship move left/right?
@@ -72,89 +72,77 @@ namespace csharp_space_invaders
                 if (pos_x > ClientSize.Width - ship_size_x) pos_x = ClientSize.Width - ship_size_x;
             }
 
-
-            //move our enemies
-
+            // move our enemies every 30th frame
             framecounter++;
-            if (framecounter ==29)
+
+            if (framecounter == 29)
             {
-                
-                bool moved = false;
+                // reset the frame counter
                 framecounter = 0;
-                if (enemy_moving_right == true && pos_x_enemy[pos_x_enemy.Length -1] + ClientSize.Width / 20 + enemy_size_x >= ClientSize.Width) //wenn 
-                {
-                    enemy_moving_right = false;
-                    for (int i = 0; i < pos_x_enemy.Length; i++)
-                    {
-                        pos_y_enemy[i] += enemy_size_y;
 
-                    }
+                // to keep track if our enemies already moved down, we created this variable.
+                // its purpose is to stop left/right movement if enemies already moved down.
+                bool moved = false;
+
+                // check if the next right/left movement would put our enemies outside the screen
+                // and if so, reverse the movement, move enemies downwards and indicate that our
+                // enemies already moved downwards
+                if ((enemy_moving_right && pos_x_enemy[pos_x_enemy.Length - 1] + ClientSize.Width / 20 + enemy_size_x >= ClientSize.Width) ||
+                    (!enemy_moving_right && pos_x_enemy[0] - ClientSize.Width / 20 <= 0))
+                {
+                    // reverse movement
+                    enemy_moving_right = !enemy_moving_right;
+
+                    // move all enemies downwards
+                    for (int i = 0; i < pos_x_enemy.Length; i++) pos_y_enemy[i] += enemy_size_y;
+
+                    // indicate that our enemies already moved downwards
                     moved = true;
                 }
-                else if (enemy_moving_right == false && pos_x_enemy[0] - ClientSize.Width / 20 <= 0)
+
+                // if our enemies didn't get moved downwards already, move them to the left/right
+                if (!moved)
                 {
-                    for (int i = 0; i < pos_x_enemy.Length; i++)
-                    {
-                        pos_y_enemy[i] += enemy_size_y;
-                        enemy_moving_right = true;
-                    }
-                    moved = true;
-                }
-              if (moved == false)
-                {
+                    // the offset for movement (default for right-side movement)
                     int offset = ClientSize.Width / 20;
-                    if (enemy_moving_right == false)
-                    { offset = -offset; }
-                    for (int i = 0; i < pos_x_enemy.Length; i++)
-                    {
-                        pos_x_enemy[i] += offset;
-                    }
 
+                    // enemies should be moving left, negate the offset
+                    if (!enemy_moving_right) offset = -offset;
+
+                    // add the offset to all enemies' X axis
+                    for (int i = 0; i < pos_x_enemy.Length; i++) pos_x_enemy[i] += offset;
                 }
-              if (pos_y_enemy[pos_y_enemy.Length-1] > ClientSize.Height - 30)
+                // also check if the enemies hit our ship, in which case we lose
+                else if (moved && pos_y_enemy[pos_y_enemy.Length - 1] > ClientSize.Height - enemy_size_y)
                 {
                     MessageBox.Show("You lose!");
-                    Environment.Exit(0); }
+                    Environment.Exit(0);
+                }
             }
 
-            
-
-
-
-            // create the rectangle (position and size) for DrawImage
+            // create the ships rectangle (position and size) for DrawImage
             RectangleF rect = new RectangleF(pos_x, pos_y, ship_size_x, ship_size_y);
 
             // draw our space ship
             g.DrawImage(space_ship, rect);
 
-            RectangleF[] enemy = new RectangleF[pos_x_enemy.Length];
-
-                int zaehler = 0;
-            foreach ( RectangleF f in enemy)
-            {
-                enemy[zaehler] = new RectangleF(pos_x_enemy[zaehler], pos_y_enemy[zaehler], enemy_size_x, enemy_size_y);
-                g.DrawImage(enemy_ship, enemy[zaehler]);
-                zaehler++;
-
-            }
+            // draw the enemies
+            for (int i = 0; i < pos_x_enemy.Length; i++) g.DrawImage(enemy_ship, new RectangleF(pos_x_enemy[i], pos_y_enemy[i], enemy_size_x, enemy_size_y));
         }
 
         public spaceinvaders()
         {
             InitializeComponent();
 
-
+            // framecounter should start at 0 (didn't draw a frame yet)
             framecounter = 0;
 
             // load our space ship image
             space_ship = Image.FromFile("./../../../img/ship.png");
 
-            // the size of our window
-            Size window_client_size = ClientSize;
-
             // size of our space ship
-            ship_size_x = 75;
-            ship_size_y = 75;
+            ship_size_x = (int)((double)ClientSize.Height / 8.1);
+            ship_size_y = (int)((double)ClientSize.Height / 8.1);
 
             // position of our space ship
             pos_x = (ClientSize.Width - ship_size_x) / 2;
@@ -164,26 +152,32 @@ namespace csharp_space_invaders
             enemy_ship = Image.FromFile("./../../../img/enemy.png");
 
             // size of the enemy
-            enemy_size_x = 30;
-            enemy_size_y = 30;
+            enemy_size_x = ClientSize.Width / 17;
+            enemy_size_y = ClientSize.Width / 17;
 
-            //position of the enemy
-            int x = 0;
-            int j = 0;
-            for (int i = 0; i<pos_x_enemy.Length;i++)
+            // set up the position of our enemies
+            int x = 0; // keeps track of how many 10's we hit (we only want 10 enemies in a single row)
+            int j = 0; // goes from 0-9 instead of 0-pos_x_enemy.Length, so that we can scale the X axis properly
+
+            for (int i = 0; i < pos_x_enemy.Length; i++)
             {
-                if (i%10 == 0)
+                // check if i is a multiplier of 10
+                if (i % 10 == 0)
                 {
-                    x++;
+                    // increase x by one
+                    if (i > 0) x++;
+
+                    // set j to 0 (since it should only go from 0-9)
                     j = 0;
-
                 }
-                else { j++; }
+                else
+                {
+                    // i is not a multiplier of 10, simply increase j by one
+                    j++;
+                }
 
-                pos_x_enemy[i] = (ClientSize.Width / 20) * (j+1)+10*(j+1);
-                pos_y_enemy[i] = ClientSize.Height / 50 + x*30;
-                
-
+                pos_x_enemy[i] = (ClientSize.Width / 20) * (j + 1) + (ClientSize.Width / 50) * (j + 1);
+                pos_y_enemy[i] = ClientSize.Height / 50 + x * enemy_size_y;
             }
 
             // add a message filter so we can capture key presses (and releases)
@@ -221,10 +215,14 @@ namespace csharp_space_invaders
                 if (left)
                 {
                     move_left = down;
+
+                    if (down && move_right) move_right = false;
                 }
                 else
                 {
                     move_right = down;
+
+                    if (down && move_left) move_left = false;
                 }
             }
 
