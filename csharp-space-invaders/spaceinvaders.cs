@@ -79,26 +79,26 @@ namespace csharp_space_invaders
             // our graphics object
             Graphics g = e.Graphics;
 
-            //checks if an enemy was hit
-            for (int i = 0; i < pos_x_enemy.Length; i++)
+            // checks if an enemy was hit
+            if (bullettravel)
             {
-                if (pos_x_bullet >= pos_x_enemy[i] && pos_x_bullet <= (pos_x_enemy[i] + ClientSize.Width / 17) &&
-                    pos_y_bullet >= pos_y_enemy[i] && pos_y_bullet <= (pos_y_enemy[i] + ClientSize.Height / 17
-                    )&& dead[i] == false)
+                for (int i = 0; i < pos_x_enemy.Length; i++)
                 {
-                    dead[i] = true;
-                    j = 0;
+                    if (pos_x_bullet >= pos_x_enemy[i] && pos_x_bullet <= (pos_x_enemy[i] + ClientSize.Width / 17) &&
+                        pos_y_bullet >= pos_y_enemy[i] && pos_y_bullet <= (pos_y_enemy[i] + ClientSize.Height / 17
+                        ) && !dead[i])
+                    {
+                        dead[i] = true;
+                        j = 0;
                         shoot = false;
-                    bullettravel = false;
-                    pos_x_bullet = 0;
-                    pos_y_bullet = 0;
-                    break;
+                        bullettravel = false;
+                        pos_x_bullet = 0;
+                        pos_y_bullet = 0;
+                        break;
 
+                    }
                 }
-
-
             }
-
 
             // move our ship
             if (move_left)
