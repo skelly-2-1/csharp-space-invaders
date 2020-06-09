@@ -46,6 +46,9 @@ namespace csharp_space_invaders
         // size of our enemies
         private int enemy_size_x, enemy_size_y;
 
+        // if the enemy is dead
+        private bool[] dead = new bool[50];
+
         //position of the bullet
         private int pos_x_bullet, pos_y_bullet;
 
@@ -75,6 +78,20 @@ namespace csharp_space_invaders
 
             // our graphics object
             Graphics g = e.Graphics;
+
+            //checks if an enemy was hit
+            for (int i = 0; i < pos_x_enemy.Length; i++)
+            {
+                if (pos_x_bullet >= pos_x_enemy[i] && pos_x_bullet <= (pos_x_enemy[i] + ClientSize.Width / 17) &&
+                    pos_y_bullet >= pos_y_enemy[i] && pos_y_bullet <= (pos_y_enemy[i] + ClientSize.Height / 17
+                    ))
+                {
+                    dead[i] = true;
+                }
+
+
+            }
+
 
             // move our ship
             if (move_left)
@@ -145,7 +162,12 @@ namespace csharp_space_invaders
             g.DrawImage(space_ship, rect);
 
             // draw the enemies
-            for (int i = 0; i < pos_x_enemy.Length; i++) g.DrawImage(enemy_ship, new RectangleF(pos_x_enemy[i], pos_y_enemy[i], enemy_size_x, enemy_size_y));
+            for (int i = 0; i < pos_x_enemy.Length; i++)
+            {
+                if (dead[i] == false)
+                { g.DrawImage(enemy_ship, new RectangleF(pos_x_enemy[i], pos_y_enemy[i], enemy_size_x, enemy_size_y)); }
+                else { }
+                    }
 
             //draws the bullet
             if (shoot == true)
@@ -166,6 +188,7 @@ namespace csharp_space_invaders
 
                 if (pos_y_bullet <= 0)
                 { shoot = false;
+                    bullettravel = false;
                     i = 0;
                 }
 
@@ -206,7 +229,7 @@ namespace csharp_space_invaders
 
             // size of the enemy
             enemy_size_x = ClientSize.Width / 17;
-            enemy_size_y = ClientSize.Width / 17;
+            enemy_size_y = ClientSize.Height / 17;
 
             // set up the position of our enemies
             int x = 0; // keeps track of how many 10's we hit (we only want 10 enemies in a single row)
@@ -232,6 +255,8 @@ namespace csharp_space_invaders
                 pos_x_enemy[i] = (ClientSize.Width / 20) * (j + 1) + (ClientSize.Width / 50) * (j + 1);
                 pos_y_enemy[i] = ClientSize.Height / 50 + x * enemy_size_y;
             }
+
+
 
             // add a message filter so we can capture key presses (and releases)
             Application.AddMessageFilter(this);
