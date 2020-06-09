@@ -172,7 +172,7 @@ namespace csharp_space_invaders
                     for (int i = 0; i < pos_x_enemy.Length; i++) pos_x_enemy[i] += offset;
                 }
                 // also check if the enemies hit our ship, in which case we lose
-                else if (moved && pos_y_enemy[pos_y_enemy.Length - 1] > ClientSize.Height - enemy_size_y)
+                else if (moved && pos_y_enemy[pos_y_enemy.Length - 1] > ClientSize.Height - enemy_size_y - ship_size_y)
                 {
                     MessageBox.Show("You lose!");
                     Environment.Exit(0);
