@@ -84,7 +84,7 @@ namespace csharp_space_invaders
             {
                 if (pos_x_bullet >= pos_x_enemy[i] && pos_x_bullet <= (pos_x_enemy[i] + ClientSize.Width / 17) &&
                     pos_y_bullet >= pos_y_enemy[i] && pos_y_bullet <= (pos_y_enemy[i] + ClientSize.Height / 17
-                    ))
+                    )&& dead[i] == false)
                 {
                     dead[i] = true;
                     j = 0;
@@ -92,8 +92,6 @@ namespace csharp_space_invaders
                     bullettravel = false;
                     pos_x_bullet = 0;
                     pos_y_bullet = 0;
-                    pos_x_enemy[i] = 90000;
-                    pos_y_enemy[i] = 90000;
                     break;
 
                 }
@@ -193,7 +191,7 @@ namespace csharp_space_invaders
                 g.DrawImage(laser_bullet, rect2);
                 
                 bullettravel = true;
-                pos_y_bullet -= 4;
+                pos_y_bullet -= 8;
 
                 if (pos_y_bullet <= 0)
                 { shoot = false;
