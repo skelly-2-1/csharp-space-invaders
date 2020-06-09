@@ -19,6 +19,9 @@ namespace csharp_space_invaders
         //test
         private int j = 0;
 
+        //hit counter
+        private int h = 0;
+
         // frame counter for enemy movement
         private int framecounter;
 
@@ -64,11 +67,14 @@ namespace csharp_space_invaders
         // tells if the bullet is still on the way
         private bool bullettravel = false;
 
+        //tells if we won
+        private bool win = false;
+
         // gets called every time our timer fires
         private void timer_event(Object source, EventArgs e)
         {
             // refreshes the window, forcing it to re-draw (so OnPaint gets called again)
-            Refresh();
+            if ( win == false) Refresh();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -78,6 +84,17 @@ namespace csharp_space_invaders
 
             // our graphics object
             Graphics g = e.Graphics;
+
+            //checks if we won
+            for (int i = 0; i < pos_x_enemy.Length; i++)
+            {
+                if (dead[i] == true)
+                { h++; }
+                if (h == 50)
+                { MessageBox.Show("you win!"); win = true; break; }
+                
+            }
+            h = 0;
 
             //checks if an enemy was hit
             for (int i = 0; i < pos_x_enemy.Length; i++)
@@ -191,7 +208,7 @@ namespace csharp_space_invaders
                 g.DrawImage(laser_bullet, rect2);
                 
                 bullettravel = true;
-                pos_y_bullet -= 8;
+                pos_y_bullet -= 25;
 
                 if (pos_y_bullet <= 0)
                 { shoot = false;
