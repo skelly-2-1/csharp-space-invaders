@@ -17,7 +17,7 @@ namespace csharp_space_invaders
         private static System.Windows.Forms.Timer refresh_timer;
 
         //test
-        private int i = 0;
+        private int j = 0;
 
         // frame counter for enemy movement
         private int framecounter;
@@ -87,6 +87,15 @@ namespace csharp_space_invaders
                     ))
                 {
                     dead[i] = true;
+                    j = 0;
+                        shoot = false;
+                    bullettravel = false;
+                    pos_x_bullet = 0;
+                    pos_y_bullet = 0;
+                    pos_x_enemy[i] = 90000;
+                    pos_y_enemy[i] = 90000;
+                    break;
+
                 }
 
 
@@ -172,12 +181,12 @@ namespace csharp_space_invaders
             //draws the bullet
             if (shoot == true)
             {
-                if( i == 0)
+                if( j == 0)
                         {
                     // startposition of the bullet
                     pos_x_bullet = pos_x + ship_size_x / 2 - 2;
                     pos_y_bullet = pos_y - 2;
-                    i = 1;
+                    j = 1;
                 }
 
                 RectangleF rect2 = new RectangleF(pos_x_bullet, pos_y_bullet, laser_bullet_size_x, laser_bullet_size_y);
@@ -189,7 +198,7 @@ namespace csharp_space_invaders
                 if (pos_y_bullet <= 0)
                 { shoot = false;
                     bullettravel = false;
-                    i = 0;
+                    j = 0;
                 }
 
             }
