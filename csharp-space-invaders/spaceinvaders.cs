@@ -16,6 +16,9 @@ namespace csharp_space_invaders
         // the timer that forces our window to refresh
         private static System.Windows.Forms.Timer refresh_timer;
 
+        //test
+        private int i = 0;
+
         // frame counter for enemy movement
         private int framecounter;
 
@@ -27,6 +30,9 @@ namespace csharp_space_invaders
 
         // image of our enemy
         private Image enemy_ship;
+
+        //image of the laser bullet
+        private Image laser_bullet;
 
         // position of our space ship
         private int pos_x, pos_y;
@@ -40,8 +46,20 @@ namespace csharp_space_invaders
         // size of our enemies
         private int enemy_size_x, enemy_size_y;
 
+        //position of the bullet
+        private int pos_x_bullet, pos_y_bullet;
+
+        //Size of the bullet
+        private int laser_bullet_size_x, laser_bullet_size_y;
+
         // should our space ship move left/right?
         private bool move_left = false, move_right = false;
+
+        //tells if we shoot
+        private bool shoot = false;
+
+        // tells if the bullet is still on the way
+        private bool bullettravel = false;
 
         // gets called every time our timer fires
         private void timer_event(Object source, EventArgs e)
@@ -128,6 +146,30 @@ namespace csharp_space_invaders
 
             // draw the enemies
             for (int i = 0; i < pos_x_enemy.Length; i++) g.DrawImage(enemy_ship, new RectangleF(pos_x_enemy[i], pos_y_enemy[i], enemy_size_x, enemy_size_y));
+
+            //draws the bullet
+            if (shoot == true)
+            {
+                if( i == 0)
+                        {
+                    // startposition of the bullet
+                    pos_x_bullet = pos_x + ship_size_x / 2 - 2;
+                    pos_y_bullet = pos_y - 2;
+                    i = 1;
+                }
+
+                RectangleF rect2 = new RectangleF(pos_x_bullet, pos_y_bullet, laser_bullet_size_x, laser_bullet_size_y);
+                g.DrawImage(laser_bullet, rect2);
+                
+                bullettravel = true;
+                pos_y_bullet -= 4;
+
+                if (pos_y_bullet <= 0)
+                { shoot = false;
+                    i = 0;
+                }
+
+            }
         }
 
         public spaceinvaders()
@@ -136,6 +178,8 @@ namespace csharp_space_invaders
 
             // framecounter should start at 0 (didn't draw a frame yet)
             framecounter = 0;
+
+
 
             // load our space ship image
             space_ship = Image.FromFile("./../../../img/ship.png");
@@ -147,6 +191,15 @@ namespace csharp_space_invaders
             // position of our space ship
             pos_x = (ClientSize.Width - ship_size_x) / 2;
             pos_y = (ClientSize.Height - ship_size_y) - ClientSize.Height / 50;
+
+            // load the laser bullet image
+            laser_bullet = Image.FromFile("./../../../img/laser.png");
+
+            // size of the laser bullet
+            laser_bullet_size_x = 5;
+            laser_bullet_size_y = 10;
+
+
 
             // load our enemy
             enemy_ship = Image.FromFile("./../../../img/enemy.png");
@@ -207,18 +260,22 @@ namespace csharp_space_invaders
             Keys keycode = e.KeyCode;
 
             // check if we pressed A/D/Left/Right
-            if (keycode == Keys.A || keycode == Keys.D || keycode == Keys.Left || keycode == Keys.Right)
+            if (keycode == Keys.A || keycode == Keys.D || keycode == Keys.Left || keycode == Keys.Right || keycode == Keys.Space)
             {
                 bool down = (m.Msg == WM_KEYDOWN);
                 bool left = (keycode == Keys.A || keycode == Keys.Left);
+                bool shit = (keycode == Keys.Space);
 
-                if (left)
+                if (shit)
+                { shoot = true; }
+                
+                else if (left)
                 {
                     move_left = down;
 
                     if (down && move_right) move_right = false;
                 }
-                else
+                else if (!left)
                 {
                     move_right = down;
 
